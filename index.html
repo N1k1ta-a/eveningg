@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Приглашение</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --accent-gold: #fbbf24;
+            --accent-purple: #a78bfa;
+            --accent-teal: #2dd4bf;
+            --text-main: #f8fafc;
+            --text-muted: #cbd5e1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        section {
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 2rem;
+            overflow: hidden;
+        }
+
+        .bg-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            filter: brightness(0.6) blur(2px);
+            transform: scale(1.05);
+            transition: transform 1.5s ease, filter 1.5s ease;
+        }
+
+        section:hover .bg-image {
+            transform: scale(1.1);
+            filter: brightness(0.7) blur(0px);
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(15, 23, 42, 0.5), rgba(15, 23, 42, 0.9));
+            z-index: 1;
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 3rem 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            animation: fadeInUp 1.2s ease forwards;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1, h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, var(--accent-gold), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 2rem; }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .highlight {
+            color: var(--accent-teal);
+            font-weight: 400;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            font-weight: 400;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #0f172a;
+            background: linear-gradient(135deg, var(--accent-gold), #f59e0b);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
+            margin-top: 1rem;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 30px rgba(251, 191, 36, 0.7);
+        }
+
+        .btn-back {
+            background: transparent;
+            border: 1px solid var(--accent-purple);
+            color: var(--accent-purple);
+            box-shadow: none;
+            padding: 0.8rem 2rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-back:hover {
+            background: rgba(167, 139, 250, 0.1);
+            box-shadow: 0 0 20px rgba(167, 139, 250, 0.3);
+        }
+
+        .progress-indicator {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .dot.active {
+            background: var(--accent-gold);
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 10px var(--accent-gold);
+            transform: scale(1.3);
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.6rem; }
+            p { font-size: 1rem; }
+            .content { padding: 2rem 1.5rem; }
+            .progress-indicator { display: none; }
+            .bg-image { filter: brightness(0.5) blur(1px); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="progress-indicator">
+        <div class="dot active" onclick="document.getElementById('sec1').scrollIntoView()"></div>
+        <div class="dot" onclick="document.getElementById('sec2').scrollIntoView()"></div>
+        <div class="dot" onclick="document.getElementById('sec3').scrollIntoView()"></div>
+        <div class="dot" onclick="document.getElementById('sec4').scrollIntoView()"></div>
+        <div class="dot" onclick="document.getElementById('sec5').scrollIntoView()"></div>
+        <div class="dot" onclick="document.getElementById('sec6').scrollIntoView()"></div>
+    </div>
+
+    <!-- Секция 1: ПРИГЛАШЕНИЕ -->
+    <section id="sec1">
+        <img src="images/img1.png" alt="Фон" class="bg-image">
+        <div class="overlay"></div>
+        <div class="content">
+            <h1>Приглашение<br>в тихое путешествие</h1>
+            <p>Я знаю, что сегодняшний день был тяжелым. И я не хочу оставлять тебя с этим наедине.</p>
+            <p>Поэтому я приглашаю тебя <span class="highlight">провести этот вечер вместе</span>. Не нужно никуда собираться, не нужно ничего решать. Просто позволь мне забрать тебя в место, где время замедляется, где светятся фонари и где все тревоги остаются за порогом.</p>
+            <p><strong>Я хочу, чтобы ты выдохнула. Я хочу, чтобы ты улыбнулась. Я хочу быть рядом.</strong></p>
+            <p>Дальше — пять локаций нашего вечера. Листай, смотри и просто представь, как мы там окажемся.</p>
+            <a href="#sec2" class="btn">Принять приглашение</a>
+        </div>
+    </section>
+
+    <!-- Секция 2: Локация 1 -->
+    <section id="sec2">
+        <img src="images/img1.png" alt="Тихая пристань" class="bg-image">
+        <div class="overlay"></div>
+        <div class="content">
+            <h2>I. Тихая пристань</h2>
+            <p>Здесь время замедляется. Мы оставим все тревоги на берегу, сядем у воды и просто послушаем тишину. Никаких проблем — только мы и горизонт.</p>
+            <a href="#sec3" class="btn">Дальше</a>
+        </div>
+    </section>
+
+    <!-- Секция 3: Локация 2 -->
+    <section id="sec3">
+        <img src="images/img2.png" alt="Луга синих цветов" class="bg-image">
+        <div class="overlay"></div>
+        <div class="content">
+            <h2>II. Луга синих цветов</h2>
+            <p>Говорят, если пройти по этим цветам, все печали остаются в траве. Это место, где можно выдохнуть и почувствовать, как тепло разливается по телу.</p>
+            <a href="#sec4" class="btn">Дальше</a>
+        </div>
+    </section>
+
+    <!-- Секция 4: Локация 3 -->
+    <section id="sec4">
+        <img src="images/img3.png" alt="Магический ручей" class="bg-image">
+        <div class="overlay"></div>
+        <div class="content">
+            <h2>III. Магический ручей</h2>
+            <p>Поток света и волшебства. Здесь мы найдем вдохновение и вспомним, что даже в самые темные времена рядом есть кто-то, кто готов протянуть руку.</p>
+            <a href="#sec5" class="btn">Дальше</a>
+        </div>
+    </section>
+
+    <!-- Секция 5: Локация 4 -->
+    <section id="sec5">
+        <img src="images/img4.png" alt="Поляна покоя" class="bg-image">
+        <div class="overlay"></div>
+        <div class="content">
+            <h2>IV. Поляна покоя</h2>
+            <p>Идеальное место, чтобы просто побыть вместе. Никакой суеты, только мягкая трава, теплый ветер и спокойствие. Здесь мы восстановим силы.</p>
+            <a href="#sec6" class="btn">Дальше</a>
+        </div>
+    </section>
+
+    <!-- Секция 6: Локация 5 и Финал -->
+    <section id="sec6">
+        <img src="images/img5.png" alt="Тропа фонарей" class="bg-image">
+        <div class="overlay"></div>
+        <div class="content">
+            <h2>V. Тропа фонарей</h2>
+            <p>Финальная точка нашего маршрута. Свет тысячи огней, уют и атмосфера праздника. Здесь мы оставим всю грусть и загадаем что-то хорошее.</p>
+            
+            <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px dashed var(--accent-purple);">
+                <h2>Ты согласна?</h2>
+                <p>Я не хочу, чтобы ты грустила. Этот вечер — только для тебя. Давай проведем его вместе, спрячемся от всех забот и просто побудем в этой сказке.</p>
+                <p><strong>Я приеду за тобой вечером. Просто доверься мне.</strong></p>
+                <a href="#sec1" class="btn btn-back">Вернуться в начало</a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const sections = document.querySelectorAll('section');
+        const dots = document.querySelectorAll('.dot');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= (sectionTop - sectionHeight / 3)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            dots.forEach(dot => {
+                dot.classList.remove('active');
+                if (dot.getAttribute('onclick').includes(current)) {
+                    dot.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
